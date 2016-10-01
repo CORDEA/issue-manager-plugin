@@ -1,6 +1,5 @@
 package jp.cordea.issuemanager;
 
-import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import lombok.NonNull;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
@@ -20,12 +19,12 @@ public class GitHubHelper {
 
     private String apiUrl;
 
-    public GitHubHelper(String apiUrl) {
+    GitHubHelper(String apiUrl) {
         this.apiUrl = apiUrl;
     }
 
     @NonNull
-    public GHRepository getRepository(String repoName) throws RepositoryNotFoundException {
+    GHRepository getRepository(String repoName) throws RepositoryNotFoundException {
         String token = Configuration.get().getAccessToken();
 
         if (token == null || token.isEmpty()) {
@@ -47,7 +46,7 @@ public class GitHubHelper {
         return repository;
     }
 
-    public String getRepoName(String gitUrl) throws RepositoryNotFoundException {
+    String getRepoName(String gitUrl) throws RepositoryNotFoundException {
         try {
             if (apiUrl != null && !apiUrl.isEmpty()) {
                 String host = new URL(apiUrl).getHost();

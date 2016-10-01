@@ -10,8 +10,8 @@ import java.util.List;
  */
 public class Issue {
 
-    GHIssue issue;
-    GHPullRequest pullRequest;
+    private GHIssue issue;
+    private GHPullRequest pullRequest;
 
     public Issue(GHIssue issue) {
         this.issue = issue;
@@ -21,7 +21,7 @@ public class Issue {
         this.pullRequest = pullRequest;
     }
 
-    public static Issue getIssue(GHRepository repository, int number) throws IOException {
+    static Issue getIssue(GHRepository repository, int number) throws IOException {
         GHIssue issue = repository.getIssue(number);
         if (issue != null) {
             return new Issue(issue);
@@ -33,7 +33,7 @@ public class Issue {
         return null;
     }
 
-    public static GHIssue open(GHRepository repository, String title, String message, String[] assignees) {
+    static GHIssue open(GHRepository repository, String title, String message, String[] assignees) {
         try {
             GHIssueBuilder builder = repository.createIssue(title).body(message);
             for (String assignee : assignees) {
@@ -46,7 +46,7 @@ public class Issue {
         return null;
     }
 
-    public boolean reopen() {
+    boolean reopen() {
         try {
             if (issue == null) {
                 if (pullRequest == null) {
@@ -63,7 +63,7 @@ public class Issue {
         return false;
     }
 
-    public boolean close() {
+    boolean close() {
         try {
             if (issue == null) {
                 if (pullRequest == null) {
@@ -80,7 +80,7 @@ public class Issue {
         return false;
     }
 
-    public GHIssueComment comment(String message) {
+    GHIssueComment comment(String message) {
         try {
             if (issue != null) {
                 return issue.comment(message);
