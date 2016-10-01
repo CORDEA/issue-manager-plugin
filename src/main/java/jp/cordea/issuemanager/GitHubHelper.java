@@ -34,7 +34,7 @@ public class GitHubHelper {
         GHRepository repository;
         try {
             GitHub gitHub;
-            if (apiUrl == null) {
+            if (apiUrl == null || apiUrl.isEmpty()) {
                 gitHub = GitHub.connectUsingOAuth(token);
             } else {
                 gitHub = GitHub.connectToEnterprise(apiUrl, token);
@@ -49,7 +49,7 @@ public class GitHubHelper {
 
     public String getRepoName(String gitUrl) throws RepositoryNotFoundException {
         try {
-            if (apiUrl != null) {
+            if (apiUrl != null && !apiUrl.isEmpty()) {
                 String host = new URL(apiUrl).getHost();
                 if (!gitUrl.contains(host)) {
                     throw new RepositoryNotFoundException("Host of the configured api url and git url does not match.");
