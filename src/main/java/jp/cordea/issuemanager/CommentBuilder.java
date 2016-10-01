@@ -29,11 +29,15 @@ public class CommentBuilder extends Recorder implements SimpleBuildStep {
     @Getter
     private final String number;
 
+    @Getter
+    private final boolean isPullRequestBuilder;
+
     @DataBoundConstructor
-    public CommentBuilder(String message, String path, String number) {
+    public CommentBuilder(String message, String path, String number, boolean isPullRequestBuilder) {
         this.message = message;
         this.path = path;
         this.number = number;
+        this.isPullRequestBuilder = isPullRequestBuilder;
     }
 
     @Override
@@ -53,7 +57,22 @@ public class CommentBuilder extends Recorder implements SimpleBuildStep {
             return;
         }
 
-        int num = Integer.parseInt(number);
+        int num;
+        if (isPullRequestBuilder) {
+            String branch = run.getEnvironment(taskListener).get("GIT_BRANCH");
+            try {
+                num = helper.getPullRequestNumber(branch);
+            } catch (RepositoryNotFoundException e) {
+                taskListener.error(e.getMessage());
+                return;
+            }
+        } else {
+            if (number == null || number.isEmpty()) {
+                taskListener.error("Path not found. Please set file path or message.");
+                return;
+            }
+            num = Integer.parseInt(number);
+        }
 
         String message = this.message;
         if (message == null || message.isEmpty()) {
@@ -111,7 +130,7 @@ public class CommentBuilder extends Recorder implements SimpleBuildStep {
 
         public FormValidation doCheckNumber(@QueryParameter String value) throws IOException, ServletException {
             if (value.isEmpty()) {
-                return FormValidation.error("Please set a number.");
+                return FormValidation.ok();
             }
             try {
                 int ignore = Integer.parseInt(value);

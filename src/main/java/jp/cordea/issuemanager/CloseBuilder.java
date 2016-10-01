@@ -26,9 +26,13 @@ public class CloseBuilder extends Recorder implements SimpleBuildStep {
     @Getter
     private final String number;
 
+    @Getter
+    private final boolean isPullRequestBuilder;
+
     @DataBoundConstructor
-    public CloseBuilder(String number) {
+    public CloseBuilder(String number, boolean isPullRequestBuilder) {
         this.number = number;
+        this.isPullRequestBuilder = isPullRequestBuilder;
     }
 
     @Override
@@ -48,7 +52,22 @@ public class CloseBuilder extends Recorder implements SimpleBuildStep {
             return;
         }
 
-        int num = Integer.parseInt(number);
+        int num;
+        if (isPullRequestBuilder) {
+            String branch = run.getEnvironment(taskListener).get("GIT_BRANCH");
+            try {
+                num = helper.getPullRequestNumber(branch);
+            } catch (RepositoryNotFoundException e) {
+                taskListener.error(e.getMessage());
+                return;
+            }
+        } else {
+            if (number == null || number.isEmpty()) {
+                taskListener.error("Path not found. Please set file path or message.");
+                return;
+            }
+            num = Integer.parseInt(number);
+        }
 
         try {
             Issue issue = Issue.getIssue(repository, num);

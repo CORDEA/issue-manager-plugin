@@ -1,5 +1,6 @@
 package jp.cordea.issuemanager;
 
+import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import lombok.NonNull;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
@@ -65,6 +66,19 @@ public class GitHubHelper {
             return matcher.group(1);
         }
         throw new RepositoryNotFoundException("Failed to get the repository name.");
+    }
+
+    int getPullRequestNumber(String branch) throws RepositoryNotFoundException {
+        String pattern = "[a-zA-Z0-9]+/pr/([0-9]+)/[a-zA-Z0-9]+";
+        Matcher matcher = Pattern.compile(pattern).matcher(branch);
+        if (matcher.matches()) {
+            try {
+                return Integer.parseInt(matcher.group(1));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        throw new RepositoryNotFoundException("Failed to get the Pull request number.");
     }
 
     static boolean validUser(String user) {
