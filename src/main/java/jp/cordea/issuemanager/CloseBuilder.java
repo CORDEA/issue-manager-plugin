@@ -26,8 +26,11 @@ public class CloseBuilder extends Recorder implements SimpleBuildStep {
     @Getter
     private final String number;
 
-    @Getter
     private final boolean isPullRequestBuilder;
+
+    public boolean getIsPullRequestBuilder() {
+        return isPullRequestBuilder;
+    }
 
     @DataBoundConstructor
     public CloseBuilder(String number, boolean isPullRequestBuilder) {

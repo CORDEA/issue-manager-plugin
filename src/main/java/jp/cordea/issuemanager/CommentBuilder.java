@@ -29,8 +29,11 @@ public class CommentBuilder extends Recorder implements SimpleBuildStep {
     @Getter
     private final String number;
 
-    @Getter
     private final boolean isPullRequestBuilder;
+
+    public boolean getIsPullRequestBuilder() {
+        return isPullRequestBuilder;
+    }
 
     @DataBoundConstructor
     public CommentBuilder(String message, String path, String number, boolean isPullRequestBuilder) {
