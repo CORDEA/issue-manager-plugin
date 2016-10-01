@@ -1,0 +1,15 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <f:entry title="Message" field="message">
+    <f:textarea />
+  </f:entry>
+  <f:entry title="Message file path" field="path">
+    <f:textbox />
+  </f:entry>
+  <f:entry title="Title" field="title">
+    <f:textbox />
+  </f:entry>
+  <f:entry title="Assignees" field="assignees">
+    <f:expandableTextbox />
+  </f:entry>
+</j:jelly>
